@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -134,44 +133,11 @@ public class Statistiques {
 		return classement.get(clazz) == null ? 0 : classement.get(clazz).size();
 	}
 	
-	private class ChampUid extends Champ {
-
-		public static final String uidFieldName = "id";
-		public String uuid;
+	private class Champ{
 		
-		public ChampUid() {
-			super(null, true);
-			name = uidFieldName;
-			type = UUID.class;
-			uuid = UUID.randomUUID().toString();
-		}
-		
-		@Override
-		public Object get(Object obj) {
-			return uuid.toString();
-		}
-
-		@Override
-		public int compareTo(Champ other) {
-			return other instanceof ChampUid ? 0 : -1;
-		}
-	}
-	
-	private class Champ implements Comparable<Champ> {
-
-		 String name;
 		 Field info;
 		 Class<?> type;
 		 boolean isSimple;
-
-		 public int compareTo(Champ other) {
-			int res = -1;
-			if (isSimple == other.isSimple)
-				res = name.compareTo(other.name);
-			else if (!isSimple && other.isSimple)
-				res = 1;
-			return res;
-		}
 
 		 Object get(Object obj) throws IllegalArgumentException, IllegalAccessException {
 				return info.get(obj);
@@ -182,7 +148,6 @@ public class Statistiques {
 			this.isSimple = isSimple;
 			if (info != null) {
 				type = info.getType();
-				name = info.getName();
 			}
 		}
 		
@@ -193,7 +158,7 @@ public class Statistiques {
 		private static Set<Class<?>> simpleTypes = new HashSet<Class<?>>(Arrays.asList(Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, 
 				String.class, Date.class, void.class, UUID.class)); 
 
-		public static boolean isSimple(Class<?> type) { // Simple types become XML Attributes and JSON Values
+		public static boolean isSimple(Class<?> type) {
 			return type.isPrimitive() || type.isEnum() || simpleTypes.contains(type);
 		}
 
@@ -203,7 +168,6 @@ public class Statistiques {
 			List<Champ> fields = serializablefieldsOfType.get(type);
 			if (fields == null){
 				fields = new LinkedList<Champ>();
-				Boolean hasUid = false;
 				Class<?> parent = type;
 				List<Field> fieldstmp = new LinkedList<>();
 				while(parent != Object.class){
@@ -216,16 +180,8 @@ public class Statistiques {
 						Class<?> fieldType = info.getType();
 						Champ champ = statistiques.new Champ(info, isSimple(fieldType));
 						fields.add(champ);
-						if (champ.name == ChampUid.uidFieldName) {
-							hasUid = true;
-						}
 					}
 				}			
-				if (!hasUid) {
-					fields.add(statistiques.new ChampUid());
-				}
-				//tmp.sort();
-				Collections.sort(fields);
 				serializablefieldsOfType.put(type, fields) ;
 			}
 			return fields;
