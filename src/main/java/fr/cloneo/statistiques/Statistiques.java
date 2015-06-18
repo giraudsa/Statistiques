@@ -4,13 +4,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -169,9 +170,9 @@ public class Statistiques {
 		public static List<Champ> getFields(Class<?> type, Statistiques statistiques) {
 			List<Champ> fields = serializablefieldsOfType.get(type);
 			if (fields == null){
-				fields = new LinkedList<Champ>();
+				fields = new ArrayList<Champ>();
 				Class<?> parent = type;
-				List<Field> fieldstmp = new LinkedList<>();
+				List<Field> fieldstmp = new ArrayList<>();
 				while(parent != Object.class){
 					fieldstmp.addAll(Arrays.asList(parent.getDeclaredFields()));
 					parent = parent.getSuperclass();
@@ -207,7 +208,7 @@ public class Statistiques {
 	
 	private class SetQueue<E> implements Queue<E>{
 
-		private HashSet<E> queue = new HashSet<>();
+		private Set<E> queue = new LinkedHashSet<>();
 		
 		
 		@Override
