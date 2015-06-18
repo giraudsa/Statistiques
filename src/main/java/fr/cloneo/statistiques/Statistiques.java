@@ -9,9 +9,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.Queue;
@@ -25,7 +27,7 @@ public class Statistiques {
 	private static Class<?> stringType = String.class;
 	private static Class<?> dateType = Date.class;
 	
-	private Queue<Object> aTraiter = new LinkedList<>();
+	private Queue<Object> aTraiter = new SetQueue<>();
 
 	private Map<Class<?>, Set<Object>> classement = new HashMap<>();
 	public Map<Class<?>, Set<Object>> getClassement(){
@@ -203,6 +205,109 @@ public class Statistiques {
 		}
 	}
 	
-	
+	private class SetQueue<E> implements Queue<E>{
 
+		private HashSet<E> queue = new HashSet<>();
+		
+		
+		@Override
+		public int size() {
+			return queue.size();
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return queue.isEmpty();
+		}
+
+		@Override
+		public boolean contains(Object o) {
+			return queue.contains(o);
+		}
+
+		@Override
+		public Iterator<E> iterator() {
+			return queue.iterator();
+		}
+
+		@Override
+		public Object[] toArray() {
+			return queue.toArray();
+		}
+
+		@Override
+		public <T> T[] toArray(T[] a) {
+			return queue.toArray(a);
+		}
+
+		@Override
+		public boolean remove(Object o) {
+			return queue.remove(o);
+		}
+
+		@Override
+		public boolean containsAll(Collection<?> c) {
+			return queue.containsAll(c);
+		}
+
+		@Override
+		public boolean addAll(Collection<? extends E> c) {
+			return queue.addAll(c);
+		}
+
+		@Override
+		public boolean removeAll(Collection<?> c) {
+			return queue.removeAll(c);
+		}
+
+		@Override
+		public boolean retainAll(Collection<?> c) {
+			return queue.retainAll(c);
+		}
+
+		@Override
+		public void clear() {
+			queue.clear();
+		}
+
+		@Override
+		public boolean add(E e) {
+			return queue.add(e);
+		}
+
+		@Override
+		public boolean offer(E e) {
+			return queue.add(e);
+		}
+
+		@Override
+		public E remove() {
+			if(queue.isEmpty()) throw new NoSuchElementException();
+			E e = queue.iterator().next();
+			queue.remove(e);
+			return e;
+		}
+
+		@Override
+		public E poll() {
+			if(queue.isEmpty()) return null;
+			E e = queue.iterator().next();
+			queue.remove(e);
+			return e;
+		}
+
+		@Override
+		public E element() {
+			if(queue.isEmpty()) return null;
+			E e = queue.iterator().next();
+			return e;
+		}
+
+		@Override
+		public E peek() {
+			if(queue.isEmpty()) throw new NoSuchElementException();
+			E e = queue.iterator().next();
+			return e;
+		}
+	}
 }
