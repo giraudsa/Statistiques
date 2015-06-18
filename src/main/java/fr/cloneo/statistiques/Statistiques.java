@@ -48,10 +48,7 @@ public class Statistiques {
 	
 	private void classe() throws IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InstantiationException, InvocationTargetException {
 		while(!aTraiter.isEmpty()){
-			Object obj = aTraiter.poll();
-			if(!estDejaTraite(obj)){
-				traite(obj);
-			}
+			traite(aTraiter.poll());
 		}
 	}
 
