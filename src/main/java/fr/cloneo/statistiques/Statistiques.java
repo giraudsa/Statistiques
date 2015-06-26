@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -28,7 +29,7 @@ public class Statistiques {
 	private static Class<?> stringType = String.class;
 	private static Class<?> dateType = Date.class;
 	
-	private Queue<Object> aTraiter = new SetQueue<>();
+	private Queue<Object> aTraiter = new SetQueue();
 
 	private Map<Class<?>, Set<Object>> classement = new HashMap<>();
 	public Map<Class<?>, Set<Object>> getClassement(){
