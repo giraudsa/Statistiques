@@ -55,7 +55,7 @@ public class Statistiques {
 
 	private void traite(Object obj) throws IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException, InstantiationException, InvocationTargetException {
 		range(obj);
-		if(TypeExtension.isSimple(obj.getClass())) return;
+		if(obj == null || TypeExtension.isSimple(obj.getClass())) return;
 		List<Champ> champs = TypeExtension.getFields(obj.getClass(), this);
 		for(Champ champ : champs){
 				Class<?> type = champ.type;
@@ -87,7 +87,7 @@ public class Statistiques {
 	}
 
 	private void range(Object obj) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if(obj.getClass().isPrimitive()){
+		if(obj != null && obj.getClass().isPrimitive()){
 			
 			Constructor<?> constructor = TypeExtension.getTypeEnveloppe(obj.getClass()).getConstructor(obj.getClass()); 
 			obj = constructor.newInstance(obj);
@@ -108,7 +108,7 @@ public class Statistiques {
 	
 
 	private Set<Object> getSet(Object obj) {
-		Class<?> clazz = obj.getClass();
+		Class<?> clazz = obj == null ? void.class : obj.getClass();
 		Set<Object> ret = classement.get(clazz);
 		if(ret == null){
 			ret = new HashSet<>();
